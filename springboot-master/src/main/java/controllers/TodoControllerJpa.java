@@ -1,5 +1,7 @@
 package controllers;
 
+import io.github.nthduc.springboot.springbootmaster.models.Todo;
+import io.github.nthduc.springboot.springbootmaster.repositories.TodoRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jakarta.validation.Valid;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @SessionAttributes("name")

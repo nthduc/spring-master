@@ -5,20 +5,25 @@ import './TodoApp.css';
 export default function TodoApp() {
     return (
         <div className="TodoApp">
-            Todo Management Application
+
             <BrowserRouter>
+            <HeaderComponent />
                 <Routes>
                     <Route path="/" element={<LoginComponent />} />
                     <Route path="/login" element={<LoginComponent />} />
                     <Route path="/welcome/:username" element={<WelcomeComponent />} />
                     <Route path="/todos" element={<ListTodosComponent />} />
+                    <Route path="/logout" element={<LogoutComponent />} />
+
 
                     <Route path="*" element={<ErrorComponent />} />
 
 
 
                 </Routes>
+            <FooterComponent />
             </BrowserRouter>
+
         </div>
     )
 }
@@ -112,7 +117,7 @@ function WelcomeComponent() {
         <div className="WelcomeComponent">
             <h1>Welcome {username}</h1>
             <div>
-                Manager your todos - <Link href="/todos">Go here</Link>
+                Manager your todos - <Link className='nav-link' to="/todos">Go here</Link>
             </div>
         </div>
     )
@@ -143,10 +148,10 @@ function ListTodosComponent() {
     ]
 
     return (
-        <div className="ListTodosComponent">
+        <div className="container">
             <h1>Things you want to do</h1>
             <div>
-                <table>
+                <table className='table'>
                     <thead>
                         <tr>
                             <td>ID</td>
@@ -161,10 +166,10 @@ function ListTodosComponent() {
                         {
                             todos.map(todo => (
                                 <tr key={todo.id}>
-                                    <td>{todos.id}</td>
-                                    <td>{todos.description}</td>
-                                    <td>{todos.done}</td>
-                                    <td>{todos.targetDate.toDateString()}</td>
+                                    <td>{todo.id}</td>
+                                    <td>{todo.description}</td>
+                                    <td>{todo.done.toString()}</td>
+                                    <td>{todo.targetDate.toDateString()}</td>
                                 </tr>
                             ))
                         }
@@ -172,6 +177,48 @@ function ListTodosComponent() {
 
                     </tbody>
                 </table>
+            </div>
+        </div>
+    )
+}
+
+function HeaderComponent() {
+    return (
+        <header className="header">
+            <div className="container">
+                <ul className="navbar-nav">
+                    <li className="nav-item">  <a className="nav-link" to="/welcome/nthduc">nthduc</a></li>
+                    <li className="nav-item">  <Link className="nav-link" to="/welcome/nthduc">Home</Link></li>
+                    <li className="nav-item">  <Link className="nav-link" to="/logout">Logout</Link></li>
+                    <li className="nav-item">  <Link className="nav-link" to="/">Login</Link></li>
+
+
+                </ul>
+              
+            </div>
+        </header>
+    )
+}
+
+
+function FooterComponent() {
+    return (
+        <footer className='footer'>
+            <div className="container">
+                Your Footer
+            </div>
+        </footer>
+            )
+        
+    }
+
+
+function LogoutComponent() {
+    return (
+        <div className="LogoutComponent">
+            <h1>You are logged out!</h1>
+            <div>
+                Thank you for using our App. Comeback soon!
             </div>
         </div>
     )

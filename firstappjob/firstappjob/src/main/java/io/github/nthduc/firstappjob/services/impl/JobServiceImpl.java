@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class JobServiceImpl implements JobService {
     //private List<Job> jobs = new ArrayList<>();
-    JobRepository jobRepository;
+    private final JobRepository jobRepository;
 
     public JobServiceImpl(JobRepository jobRepository) {
         this.jobRepository = jobRepository;
@@ -34,7 +34,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public Job getJobById(Long id) {
-        jobRepository.findById(id).orElse(null)r;
+        return jobRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public boolean updateJob(Long id, Job updateJob) {
-        Optional<Job> jobOptional  = jobRepository.findById(id)
+        Optional<Job> jobOptional  = jobRepository.findById(id);
         if(jobOptional.isPresent()){
                 Job job = jobOptional.get();
                 job.setTitle(updateJob.getTitle());

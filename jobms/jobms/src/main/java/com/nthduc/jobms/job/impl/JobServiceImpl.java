@@ -1,8 +1,10 @@
 package com.nthduc.jobms.job.impl;
 
+import com.nthduc.jobms.job.Job;
 import com.nthduc.jobms.job.JobRepository;
 import com.nthduc.jobms.job.JobService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -1,5 +1,6 @@
 package com.nthduc.jobms.job;
 
+import com.nthduc.jobms.job.dto.JobWithCompanyDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,8 @@ public class JobController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Job>> findAll(){
+    public ResponseEntity<List<JobWithCompanyDTO>> findAll() {
+
         return ResponseEntity.ok(jobService.findAll());
 
     }
@@ -29,13 +31,12 @@ public class JobController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Job> getJobById(@PathVariable Long id) {
-        Job job = jobService.getJobById(id);
-        if(job != null) {
-            return new ResponseEntity<>(job, HttpStatus.OK);
-        }
+    public ResponseEntity<JobWithCompanyDTO> getJobById(@PathVariable  Long id){
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        JobWithCompanyDTO jobWithCompanyDTO = jobService.getJobById(id);
+        if(jobWithCompanyDTO != null) return new ResponseEntity<>(jobWithCompanyDTO, HttpStatus.OK);
+
+        return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")

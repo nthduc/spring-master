@@ -1,14 +1,18 @@
 package com.nthduc.companyms.company;
 
+import com.nthduc.companyms.company.dto.ReviewMessage;
+
 import java.util.List;
 
 public interface CompanyService {
-    List<Company> getAllCompanies();
-    boolean updateCompany(Company company, Long id);
+    List<Company> findAll();
 
-    void createCompany(Company company);
-    boolean deleteCompanyById(Long id);
+    String createCompany(CompanyRequest companyRequest);
 
-    Company getCompanyById(Long id);
+    CompanyResponse updateCompany(Long id, CompanyRequest companyRequest);
+
+    String deleteCompany(Long id);
+
+    CompanyResponse findCompanyById(Long id);
 
 }

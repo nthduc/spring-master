@@ -1,63 +1,77 @@
 package com.nthduc.companyms.company.impl;
 
-import com.nthduc.companyms.company.Company;
-import com.nthduc.companyms.company.CompanyRepository;
-import com.nthduc.companyms.company.CompanyService;
+import com.nthduc.companyms.company.*;
+import com.nthduc.companyms.company.dto.ReviewMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
-public class CompanyServiceImpl implements CompanyService {
+@RequiredArgsConstructor
+public class CompanyServiceImpl implements CompanyService{
+
     private final CompanyRepository companyRepository;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository) {
-        this.companyRepository = companyRepository;
-    }
-
     @Override
-    public List<Company> getAllCompanies() {
+    public List<Company> findAll() {
         return companyRepository.findAll();
     }
 
     @Override
-    public boolean updateCompany(Company updateCompany, Long id) {
-        Optional<Company> companyOptional  = companyRepository.findById(id);
+    public String createCompany(CompanyRequest companyRequest) {
+        Company company = Company.builder()
+                .name(companyRequest.getName())
+                .description(companyRequest.getDescription())
+                .build();
+        companyRepository.save(company);
+        return company.toString();
+    }
+
+    @Override
+    public CompanyResponse updateCompany(Long id, CompanyRequest companyRequest) {
+        Optional<Company> companyOptional = companyRepository.findById(id);
+        if (companyOptional.isPresent()){
+            Company company = companyOptional.get();
+            company.setName(companyRequest.getName());
+            company.setDescription(companyRequest.getDescription());
+            companyRepository.save(company);
+            return mapToCompanyResponse(company);
+        }else {
+            throw new NoSuchElementException("Company with ID " + id + " not found");
+        }
+    }
+
+    @Override
+    public String deleteCompany(Long id) {
+        Optional<Company> companyOptional = companyRepository.findById(id);
+        if (companyOptional.isPresent()){
+            Company company = companyOptional.get();
+            companyRepository.delete(company);
+            return "Company Deleted";
+        }else{
+            throw new NoSuchElementException("Company with ID " + id + " not found");
+        }
+    }
+
+    @Override
+    public CompanyResponse findCompanyById(Long id) {
+        Optional<Company> companyOptional = companyRepository.findById(id);
         if(companyOptional.isPresent()){
             Company company = companyOptional.get();
-            company.setName(updateCompany.getName());
-            company.setDescription(updateCompany.getDescription());
-//            company.setJobs(updateCompany.getJobs());
-            companyRepository.save(company);
-            return true;
-
-        } else {
-
-            return false;
-        }
-    }
-
-    @Override
-    public void createCompany(Company company) {
-        companyRepository.save(company);
-    }
-
-    @Override
-    public boolean deleteCompanyById(Long id) {
-        if(companyRepository.existsById(id)){
-            companyRepository.deleteById(id);
-            return true;
+            return mapToCompanyResponse(company);
         }else {
-            return false;
-
+            throw new NoSuchElementException("Company with ID " + id + " not found");
         }
     }
 
-    @Override
-    public Company getCompanyById(Long id) {
-        return companyRepository.findById(id).orElse(null);
+    private CompanyResponse mapToCompanyResponse(Company company) {
+        return CompanyResponse.builder()
+                .id(company.getId())
+                .name(company.getName())
+                .description(company.getDescription())
+                .build();
     }
-
-
 }
